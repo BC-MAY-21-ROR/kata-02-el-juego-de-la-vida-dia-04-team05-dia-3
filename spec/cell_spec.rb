@@ -1,29 +1,39 @@
+# frozen_string_literal: true
+
 require 'rspec'
-require './lib/cell.rb'
-
+require './lib/cell'
+require './lib/location'
 describe Cell do
-		before :each do 
-				@cell = Cell.new(0, 0)
-		end
-		it 'is alive when it is created' do            
-			expect(!@cell.alive?).to be_     
-		end
+  before :all do
+    @cell = Cell.new(Location::CENTER)
+  end
+  it 'is alive when it is created' do
+    expect(!@cell.alive?).to be_falsey
+  end
 
-		it 'is alive when it is created' do            
-			expect(@cell.alive?).to eq(true)           
-		end  
+  it 'is alive when it is created' do
+    expect(@cell.alive?).to be_truthy
+  end
 
-    it "a cell can't transition from live to dead" do
-		  @cell.die!          
-			expect(!@cell.alive?).to be_falsey
-		end
+  it "a cell can't transition from live to dead" do
+    @cell.die
+    expect(@cell.alive?).to be_falsey
+  end
 
-		it 'a cell can transition from live to dead' do
-			expect(@cell.alive?).to be_truthy
-		end
+  it 'a cell can transition to dead' do
+    @cell.die
+    expect(!@cell.alive?).to be_truthy
+  end
 
-    # it 'a cell have coordinates x, y' do
-		# 	cell = Cell.new(0, 0)
-    #   expect(cell).to eq(@y=0, @x=0)
-		# end
+  it 'returns true if a cell is located in the specified location' do
+    cell = Cell.new(Location::CENTER)
+    result = cell.at?(Location::CENTER)
+    expect(result).to be_truthy
+  end
+
+  it 'returns false if a cell is not located in the specified location' do
+    cell = Cell.new(Location::CENTER)
+    result = cell.at?(Location::NORTH)
+    expect(result).to be_falsey
+  end
 end
